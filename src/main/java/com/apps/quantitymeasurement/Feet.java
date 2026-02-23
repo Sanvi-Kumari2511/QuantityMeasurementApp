@@ -3,7 +3,7 @@ package com.apps.quantitymeasurement;
 //Class representing a feet value
 public class Feet {
 
-	private final double value; // immutable value
+	private final double value; 
 
 	// Constructor
 	public Feet(double value) {
