@@ -4,7 +4,7 @@ import com.apps.quantitymeasurement.Length.LengthUnit;
 
 public class QuantityMeasurementApp {
 
-	// UC1–UC4: Equality
+	// UC1-UC-4 : Equality
 	public static boolean demonstrateLengthEquality(Length l1, Length l2) {
 		return l1.equals(l2);
 	}
@@ -13,11 +13,13 @@ public class QuantityMeasurementApp {
 		return demonstrateLengthEquality(new Length(v1, u1), new Length(v2, u2));
 	}
 
-	// UC5: Conversion (overloaded)
+	// raw values
 	public static double demonstrateLengthConversion(double value, LengthUnit fromUnit, LengthUnit toUnit) {
+
 		return Length.convert(value, fromUnit, toUnit);
 	}
 
+	// UC-5 : Conversion(Overloaded)
 	public static Length demonstrateLengthConversion(Length length, LengthUnit toUnit) {
 		return length.convertTo(toUnit);
 	}
@@ -25,6 +27,11 @@ public class QuantityMeasurementApp {
 	// UC6: Addition
 	public static Length demonstrateLengthAddition(Length length1, Length length2) {
 		return length1.add(length2);
+	}
+
+	// UC7 : Target Addition
+	public static Length demonstrateLengthAddition(Length l1, Length l2, Length.LengthUnit targetUnit) {
+		return l1.add(l2, targetUnit);
 	}
 
 	public static void main(String[] args) {

@@ -8,9 +8,13 @@ public class Length {
 	private final LengthUnit unit;
 	private static final double EPS = 1e-6;
 
-	// Base unit = INCHES
+	// Base unit = inches
 	public enum LengthUnit {
-		FEET(12.0), INCHES(1.0), YARDS(36.0), CENTIMETERS(0.393701);
+
+		FEET(12.0), // 1 ft = 12 inches
+		INCHES(1.0), // 1 in = 1 inches
+		YARDS(36.0), // 1 yard = 36 in (3 ft)
+		CENTIMETERS(0.393701); // 1 cm = 0.393701 inches
 
 		private final double toInchesFactor;
 
@@ -28,10 +32,12 @@ public class Length {
 	}
 
 	public Length(double value, LengthUnit unit) {
-		if (unit == null)
+		if (unit == null) {
 			throw new IllegalArgumentException("Unit cannot be null");
-		if (!Double.isFinite(value))
-			throw new IllegalArgumentException("Value must be finite");
+		}
+		if (!Double.isFinite(value)) {
+			throw new IllegalArgumentException("Value must be finite.");
+		}
 		this.value = value;
 		this.unit = unit;
 	}
@@ -50,51 +56,84 @@ public class Length {
 
 	// UC5: Convert instance to target unit
 	public Length convertTo(LengthUnit targetUnit) {
-		if (targetUnit == null)
+		if (targetUnit == null) {
 			throw new IllegalArgumentException("Target unit cannot be null");
-		double inches = toBaseInches();
+		}
+		double inches = this.toBaseInches();
 		double converted = targetUnit.fromInches(inches);
 		return new Length(converted, targetUnit);
 	}
 
 	// UC5: Static convert API
 	public static double convert(double value, LengthUnit source, LengthUnit target) {
-		if (source == null || target == null)
-			throw new IllegalArgumentException("Source/Target unit cannot be null");
-		if (!Double.isFinite(value))
-			throw new IllegalArgumentException("Value must be finite");
+		if (source == null || target == null) {
+			throw new IllegalArgumentException("Source / Target unit cannot be null");
 
+		}
+		if (!Double.isFinite(value)) {
+			throw new IllegalArgumentException("Value must be finite.");
+		}
 		double inches = source.toInches(value);
 		return target.fromInches(inches);
+
 	}
 
-	// UC6: Addition (result in first operand unit)
+	// UC-6 : Addition
 	public Length add(Length that) {
-		if (that == null)
+		if (that == null) {
 			throw new IllegalArgumentException("Length to add cannot be null");
+		}
 
 		double thisInches = this.toBaseInches();
 		double thatInches = that.toBaseInches();
 
 		double sumInches = thisInches + thatInches;
 		double resultValue = this.unit.fromInches(sumInches);
-
 		return new Length(resultValue, this.unit);
+	}
+
+	// UC7 : Addition with target unit specialization
+	public Length add(Length length, LengthUnit targetUnit) {
+		if (length == null) {
+			throw new IllegalArgumentException("Length to add cannot be null");
+
+		}
+		if (targetUnit == null) {
+			throw new IllegalArgumentException("Target unit cannot be null");
+		}
+		return addAndConvert(length, targetUnit);
+	}
+
+	public Length addAndConvert(Length length, LengthUnit targetUnit) {
+		double thisInInches = this.unit.toInches(this.value);
+		double thatInInches = length.unit.toInches(length.value);
+
+		double sumInInches = thisInInches + thatInInches;
+
+		double resultValue = targetUnit.fromInches(sumInInches);
+
+		return new Length(resultValue, targetUnit);
 	}
 
 	@Override
 	public boolean equals(Object o) {
+
 		if (this == o)
 			return true;
+
 		if (o == null || getClass() != o.getClass())
 			return false;
+
 		Length that = (Length) o;
+
+		double diff = Math.abs(this.toBaseInches() - that.toBaseInches());
+
 		return Math.abs(this.toBaseInches() - that.toBaseInches()) < EPS;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(Math.round(toBaseInches() / EPS));
+		return Objects.hash(Double.valueOf(toBaseInches() / EPS));
 	}
 
 	@Override
