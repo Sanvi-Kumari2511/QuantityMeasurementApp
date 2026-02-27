@@ -2,8 +2,6 @@ package com.apps.quantitymeasurement;
 
 import java.util.Objects;
 
-import java.util.Objects;
-
 public class Length {
 
 	private double value;
