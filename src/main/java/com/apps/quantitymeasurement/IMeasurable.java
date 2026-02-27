@@ -1,5 +1,10 @@
 package com.apps.quantitymeasurement;
 
+@FunctionalInterface
+interface SupportsArithmetic {
+	boolean isSupported();
+}
+
 public interface IMeasurable {
 
 	double getConversionFactor();
@@ -9,4 +14,12 @@ public interface IMeasurable {
 	double convertFromBaseUnit(double baseValue);
 
 	String getUnitName();
+
+	// UC-14
+	default SupportsArithmetic supportArithmetic() {
+		return () -> true;
+	}
+
+	default void validateOperationSupport(String operation) {
+	}
 }
