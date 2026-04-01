@@ -1,10 +1,11 @@
 
-package com.apps.quantitymeasurement;
+package com.apps.quantitymeasurement.controller;
 
-import com.apps.quantitymeasurement.controller.QuantityMeasurementController;
 import com.apps.quantitymeasurement.dto.QuantityDTO;
+import com.apps.quantitymeasurement.security.JwtUtil;
+import com.apps.quantitymeasurement.service.CustomUserDetailsService;
 import com.apps.quantitymeasurement.service.IQuantityMeasurementService;
-import com.apps.quantitymeasurement.application.*;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -22,8 +23,10 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 
 @WebMvcTest(QuantityMeasurementController.class)
+@AutoConfigureMockMvc(addFilters = false)
 public class QuantityMeasurementControllerTest {
 
 	@Autowired
@@ -31,6 +34,10 @@ public class QuantityMeasurementControllerTest {
 
 	@MockBean
 	private IQuantityMeasurementService service;
+	@MockBean
+	private JwtUtil jwtUtil;
+	@MockBean
+	private CustomUserDetailsService customUserDetailsService;
 
 	// ================= COMPARE =================
 
